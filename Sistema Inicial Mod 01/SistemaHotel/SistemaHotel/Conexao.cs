@@ -9,6 +9,7 @@ namespace SistemaHotel
 {
     class Conexao
     {
+        //conexao com o baco de dados local
         String conec = "SERVER=localhost; DATABASE=hotel; UID=root; PWS=; PORT=;";
 
         public MySqlConnection con = null;
@@ -41,6 +42,10 @@ namespace SistemaHotel
                 throw ex;
             }
         }
+
+        //Declaração de Outras variaves
+
+
     }
 }
  
