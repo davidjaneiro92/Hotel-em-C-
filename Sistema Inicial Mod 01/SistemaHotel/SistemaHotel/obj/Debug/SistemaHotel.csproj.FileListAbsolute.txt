@@ -32,3 +32,4 @@ C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\bin\Debug\MySql.Data.xml
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.csproj.CopyComplete
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Cadastros.FrmUsuarios.resources
+C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Cadastros.FrmFornecedores.resources

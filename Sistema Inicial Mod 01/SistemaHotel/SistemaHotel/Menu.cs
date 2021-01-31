@@ -76,5 +76,11 @@ namespace SistemaHotel
         {
 
         }
+
+        private void fornecedoresToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cadastros.FrmFornecedores form = new Cadastros.FrmFornecedores();
+            form.Show();
+        }
     }
 }
