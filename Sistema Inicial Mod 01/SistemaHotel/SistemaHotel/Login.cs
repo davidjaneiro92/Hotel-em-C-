@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,12 @@ namespace SistemaHotel
 {
     public partial class FrmLogin : Form
     {
+
+        Conexao con = new Conexao();
+        String sql;
+        MySqlCommand cmd;
+        String id;
+
         public FrmLogin()
         {
             
@@ -63,11 +70,43 @@ namespace SistemaHotel
             }
 
             //AQUI VAI O CÓDIGO PARA O LOGIN
+            // verificar se o usuario ja existe
+            MySqlCommand cmdVerificar;
 
-            FrmMenu form = new FrmMenu();
-            //this.Hide();
-            Limpar();
-            form.Show();
+            MySqlDataReader reader;
+
+            con.AbrirCon();
+            cmdVerificar = new MySqlCommand("SELECT * FROM usuarios WHERE usuario = @usuario and senha = @senha", con.con);
+            cmdVerificar.Parameters.AddWithValue("@usuario", txtUsuario.Text);
+            cmdVerificar.Parameters.AddWithValue("@senha", txtSenha.Text);
+            reader = cmdVerificar.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                //Extraindo informações da consuta do meu Login
+                while (reader.Read())
+                {
+                    Program.nomeUsuario = Convert.ToString(reader["nome"]);
+                    Program.cargoUsuario = Convert.ToString(reader["cargo"]);
+
+                    
+                }
+                MessageBox.Show("Bem Vindo", "Login Efetuado "+ Program.nomeUsuario, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                FrmMenu form = new FrmMenu();
+                //this.Hide();
+                Limpar();
+                form.Show();
+            }
+            else
+            {
+                MessageBox.Show("Erro ao efetuar o login. Login ou Senha incorretos ", "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtUsuario.Text = "";
+                txtUsuario.Focus();
+                txtSenha.Text = "";
+               
+            }
+            con.FecharCon();
+           
         }
 
 

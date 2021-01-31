@@ -11,16 +11,16 @@ using System.Windows.Forms;
 
 namespace SistemaHotel.Cadastros
 {
-    public partial class FrmFuncionarios : Form
+    public partial class FrmUsuarios : Form
     {
 
-        Conexao con = new Conexao();
+         Conexao con = new Conexao();
         String sql;
         MySqlCommand cmd;
         String id;
-        String cpfAntigo;
+        String usuarioAntigo;
 
-        public FrmFuncionarios()
+        public FrmUsuarios()
         {
             InitializeComponent();
         }
@@ -29,22 +29,21 @@ namespace SistemaHotel.Cadastros
         {
             grid.Columns[0].HeaderText = "ID";
             grid.Columns[1].HeaderText = "Nome";
-            grid.Columns[2].HeaderText = "CPF";
-            grid.Columns[3].HeaderText = "Endereço";
-            grid.Columns[4].HeaderText = "Telefone";
-            grid.Columns[5].HeaderText = "Cargo";
-            grid.Columns[6].HeaderText = "Data";
+            grid.Columns[2].HeaderText = "cargo";
+            grid.Columns[3].HeaderText = "Usuário";
+            grid.Columns[4].HeaderText = "Senha";
+            grid.Columns[5].HeaderText = "Data";
 
             grid.Columns[0].Visible = false;
 
-           // grid.Columns[1].Width = 200;
+            // grid.Columns[1].Width = 200;
         }
 
         private void Lista()
         {
 
             con.AbrirCon();
-            sql = "SELECT * FROM funcionario order by nome asc";
+            sql = "SELECT * FROM usuarios order by nome asc";
             cmd = new MySqlCommand(sql, con.con);
             MySqlDataAdapter da = new MySqlDataAdapter();
             da.SelectCommand = cmd;
@@ -58,24 +57,9 @@ namespace SistemaHotel.Cadastros
         private void BuscarNome()
         {
             con.AbrirCon();
-            sql = "SELECT * FROM funcionario where nome LIKE @nome order by nome asc"; // LIKE: para buscar em aproximação
+            sql = "SELECT * FROM usuarios where nome LIKE @nome order by nome asc"; // LIKE: para buscar em aproximação
             cmd = new MySqlCommand(sql, con.con);
             cmd.Parameters.AddWithValue("@nome", txtBuscarNome.Text + "%");
-            MySqlDataAdapter da = new MySqlDataAdapter();
-            da.SelectCommand = cmd;
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            grid.DataSource = dt;
-            con.FecharCon();
-            FormatarDG();
-        }
-
-        private void BuscarCpf()
-        {
-            con.AbrirCon();
-            sql = "SELECT * FROM funcionario where cpf LIKE @cpf order by nome asc"; // LIKE: para buscar em aproximação
-            cmd = new MySqlCommand(sql, con.con);
-            cmd.Parameters.AddWithValue("@cpf", txtBuscarCPF.Text + "%");
             MySqlDataAdapter da = new MySqlDataAdapter();
             da.SelectCommand = cmd;
             DataTable dt = new DataTable();
@@ -96,23 +80,34 @@ namespace SistemaHotel.Cadastros
             DataTable dt = new DataTable();
             da.Fill(dt);
 
-                cbCargo.DataSource = dt;
-                // cbCargo.ValueMember = "id";
-                cbCargo.DisplayMember = "cargo";
-           
-            
+
+            cbCargo.DataSource = dt;
+            // cbCargo.ValueMember = "id";
+            cbCargo.DisplayMember = "cargo";
+
+
 
             con.FecharCon();
+
+        }
+
+        private void FrmUsuarios_Load(object sender, EventArgs e)
+        {
+            carregarComboox();
+            Lista();
+        }
+
+        private void txtNome_TextChanged(object sender, EventArgs e)
+        {
 
         }
 
         private void habilitarCampos()
         {
             txtNome.Enabled = true;
-            txtCPF.Enabled = true;
-            txtEndereco.Enabled = true;
+            txtUsuario.Enabled = true;
+            txtSenha.Enabled = true;
             cbCargo.Enabled = true;
-            txtTelefone.Enabled = true;
             txtNome.Focus();
 
         }
@@ -121,57 +116,27 @@ namespace SistemaHotel.Cadastros
         private void desabilitarCampos()
         {
             txtNome.Enabled = false;
-            txtCPF.Enabled = false;
-            txtEndereco.Enabled = false;
+            txtUsuario.Enabled = false;
+            txtSenha.Enabled = false;
             cbCargo.Enabled = false;
-            txtTelefone.Enabled = false;
+            
         }
 
 
         private void limparCampos()
         {
             txtNome.Text = "";
-            txtCPF.Text = "";
-            txtEndereco.Text = "";
-            txtTelefone.Text = "";
+            txtUsuario.Text = "";
+            txtSenha.Text = "";
+           
         }
 
-
-
-
-        private void FrmFuncionarios_Load(object sender, EventArgs e)
-        {
-            rbNome.Checked = true;
-            carregarComboox();
-            Lista();
-
-        }
-
-        private void RbNome_CheckedChanged(object sender, EventArgs e)
-        {
-            txtBuscarNome.Visible = true;
-            txtBuscarCPF.Visible = false;
-
-            txtBuscarNome.Text = "";
-            txtBuscarCPF.Text = "";
-
-        }
-
-        private void RbCPF_CheckedChanged(object sender, EventArgs e)
-        {
-            txtBuscarNome.Visible = false;
-            txtBuscarCPF.Visible = true;
-
-            txtBuscarNome.Text = "";
-            txtBuscarCPF.Text = "";
-        }
-
-        private void BtnNovo_Click(object sender, EventArgs e)
+        private void btnNovo_Click(object sender, EventArgs e)
         {
             if (cbCargo.Text == "")
             {
                 MessageBox.Show("Cadastre um Cargo");
-                Close(); 
+                Close();
             }
             habilitarCampos();
             btnSalvar.Enabled = true;
@@ -180,7 +145,7 @@ namespace SistemaHotel.Cadastros
             btnExcluir.Enabled = false;
         }
 
-        private void BtnSalvar_Click(object sender, EventArgs e)
+        private void btnSalvar_Click(object sender, EventArgs e)
         {
             if (txtNome.Text.ToString().Trim() == "")
             {
@@ -190,42 +155,36 @@ namespace SistemaHotel.Cadastros
                 return;
             }
 
-            if (txtCPF.Text == "   .   .   -")
-            {
-                MessageBox.Show("Preencha o CPF", "Campo Vazio", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtCPF.Focus();
-                return;
-            }
+           
 
 
             //CÓDIGO DO BOTÃO PARA SALVAR
 
             con.AbrirCon();
-            sql = "INSERT INTO  funcionario (nome, cpf, endereco, telefone, cargo, data) VALUES (@nome, @cpf, @endereco, @telefone, @cargo, curDate())";
+            sql = "INSERT INTO  usuarios (nome, usuario, senha, cargo, data) VALUES (@nome, @usuario, @senha, @cargo, curDate())";
             cmd = new MySqlCommand(sql, con.con);
             cmd.Parameters.AddWithValue("@nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@cpf", txtCPF.Text);
-            cmd.Parameters.AddWithValue("@endereco", txtEndereco.Text);
-            cmd.Parameters.AddWithValue("@telefone", txtTelefone.Text);
+            cmd.Parameters.AddWithValue("@usuario", txtUsuario.Text);
+            cmd.Parameters.AddWithValue("@senha", txtSenha.Text);
             cmd.Parameters.AddWithValue("@cargo", cbCargo.Text);
-
 
             // verificar se o usuario ja existe
             MySqlCommand cmdVerificar;
-            cmdVerificar = new MySqlCommand("SELECT * FROM funcionario WHERE cpf = @cpf", con.con);
-            cmdVerificar.Parameters.AddWithValue("@cpf", txtCPF.Text);
+            cmdVerificar = new MySqlCommand("SELECT * FROM usuarios WHERE usuario = @usuario", con.con);
+            cmdVerificar.Parameters.AddWithValue("@usuario", txtUsuario.Text);
             MySqlDataAdapter da = new MySqlDataAdapter();
             da.SelectCommand = cmdVerificar;
             DataTable dt = new DataTable();
             da.Fill(dt);
-            if (dt.Rows.Count > 0)
+            if(dt.Rows.Count > 0)
             {
-                MessageBox.Show("CPF ja Existe", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtCPF.Text = "";
-                txtCPF.Focus();
+                MessageBox.Show("Usuario ja Existe", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtUsuario.Text = "";
+                txtUsuario.Focus();
                 return;
             }
-
+           
+           
 
             cmd.ExecuteNonQuery();
             con.FecharCon();
@@ -238,12 +197,7 @@ namespace SistemaHotel.Cadastros
             desabilitarCampos();
         }
 
-        private void Grid_Click(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void BtnEditar_Click(object sender, EventArgs e)
+        private void btnEditar_Click(object sender, EventArgs e)
         {
             if (txtNome.Text.ToString().Trim() == "")
             {
@@ -253,49 +207,39 @@ namespace SistemaHotel.Cadastros
                 return;
             }
 
-            if (txtCPF.Text == "   .   .   -")
-            {
-                MessageBox.Show("Preencha o CPF", "Campo Vazio", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtCPF.Focus();
-                return;
-            }
-
 
             //CÓDIGO DO BOTÃO PARA EDITAR
 
             con.AbrirCon();
-            sql = "UPDATE  funcionario SET nome = @nome, cpf = @cpf, endereco = @endereco, telefone = @telefone, cargo = @cargo where id = @id";
+            sql = "UPDATE  usuarios SET nome = @nome, cargo = @cargo, usuario = @usuario, senha = @senha  where id = @id";
             cmd = new MySqlCommand(sql, con.con);
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Parameters.AddWithValue("@nome", txtNome.Text);
-            cmd.Parameters.AddWithValue("@cpf", txtCPF.Text);
-            cmd.Parameters.AddWithValue("@endereco", txtEndereco.Text);
-            cmd.Parameters.AddWithValue("@telefone", txtTelefone.Text);
+            cmd.Parameters.AddWithValue("@usuario", txtUsuario.Text);
+            cmd.Parameters.AddWithValue("@senha", txtSenha.Text);
             cmd.Parameters.AddWithValue("@cargo", cbCargo.Text);
 
-            // verificar se o usuario ja existe
-            if(txtCPF.Text != cpfAntigo)
+            if (txtUsuario.Text != usuarioAntigo)
             {
+                // verificar se o usuario ja existe
                 MySqlCommand cmdVerificar;
-                cmdVerificar = new MySqlCommand("SELECT * FROM funcionario WHERE cpf = @cpf", con.con);
-                cmdVerificar.Parameters.AddWithValue("@cpf", txtCPF.Text);
+                cmdVerificar = new MySqlCommand("SELECT * FROM usuarios WHERE usuario = @usuario", con.con);
+                cmdVerificar.Parameters.AddWithValue("@usuario", txtUsuario.Text);
                 MySqlDataAdapter da = new MySqlDataAdapter();
                 da.SelectCommand = cmdVerificar;
                 DataTable dt = new DataTable();
                 da.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    MessageBox.Show("CPF ja Existe", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txtCPF.Text = "";
-                    txtCPF.Focus();
+                    MessageBox.Show("Usuario ja Existe", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtUsuario.Text = "";
+                    txtUsuario.Focus();
                     return;
                 }
             }
 
-           
 
-
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
             con.FecharCon();
 
             MessageBox.Show("Registro Editado com Sucesso!", "Dados Editados", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -307,7 +251,7 @@ namespace SistemaHotel.Cadastros
             Lista();
         }
 
-        private void BtnExcluir_Click(object sender, EventArgs e)
+        private void btnExcluir_Click(object sender, EventArgs e)
         {
             var resultado = MessageBox.Show("Deseja Realmente Excluir o Registro?", "Excluir Registro", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultado == DialogResult.Yes)
@@ -316,7 +260,7 @@ namespace SistemaHotel.Cadastros
 
 
                 con.AbrirCon();
-                sql = "DELETE FROM  funcionario where id = @id";
+                sql = "DELETE FROM  usuarios where id = @id";
                 cmd = new MySqlCommand(sql, con.con);
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.ExecuteNonQuery();
@@ -332,15 +276,8 @@ namespace SistemaHotel.Cadastros
             }
         }
 
-        private void cbCargo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-
         private void grid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            
-
             btnEditar.Enabled = true;
             btnExcluir.Enabled = true;
             btnSalvar.Enabled = false;
@@ -348,42 +285,16 @@ namespace SistemaHotel.Cadastros
 
             id = grid.CurrentRow.Cells[0].Value.ToString();
             txtNome.Text = grid.CurrentRow.Cells[1].Value.ToString();
-            txtCPF.Text = grid.CurrentRow.Cells[2].Value.ToString();
-            txtEndereco.Text = grid.CurrentRow.Cells[3].Value.ToString();
-            txtTelefone.Text = grid.CurrentRow.Cells[4].Value.ToString();
-            cbCargo.Text = grid.CurrentRow.Cells[5].Value.ToString();
+            txtUsuario.Text = grid.CurrentRow.Cells[3].Value.ToString();
+            txtSenha.Text = grid.CurrentRow.Cells[4].Value.ToString();
+            cbCargo.Text = grid.CurrentRow.Cells[2].Value.ToString();
 
-            cpfAntigo = grid.CurrentRow.Cells[2].Value.ToString();
+            usuarioAntigo = Text = grid.CurrentRow.Cells[3].Value.ToString();
         }
 
         private void txtBuscarNome_TextChanged(object sender, EventArgs e)
         {
-            if (txtBuscarNome.Text == "")
-            {
-                Lista();
-            }
-            else
-            {
-                BuscarNome();
-            }
-           
-        }
-
-        private void txtBuscarCPF_TextChanged(object sender, EventArgs e)
-        {
-            if (txtBuscarCPF.Text == "   .   .   -")
-            {
-                Lista();
-            }
-            else
-            {
-                BuscarCpf();
-            }
-                
-        }
-
-        private void txtBuscarCPF_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
+            BuscarNome();
 
         }
     }

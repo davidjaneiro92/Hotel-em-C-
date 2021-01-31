@@ -190,5 +190,10 @@ namespace SistemaHotel.Cadastros
 
             // MessageBox.Show(id);
         }
+
+        private void grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

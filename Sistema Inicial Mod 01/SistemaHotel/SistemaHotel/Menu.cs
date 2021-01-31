@@ -12,6 +12,9 @@ namespace SistemaHotel
 {
     public partial class FrmMenu : Form
     {
+
+        
+
         public FrmMenu()
         {
             InitializeComponent();
@@ -26,11 +29,16 @@ namespace SistemaHotel
         {
             Close();
         }
-
+        // cargo e usuario
         private void FrmMenu_Load(object sender, EventArgs e)
         {
             pnlTopo.BackColor = Color.FromArgb(230, 230, 230);
             pnlRight.BackColor = Color.FromArgb(130, 130, 130);
+          
+            // cargo e usuario
+            lblUsuario.Text = Program.nomeUsuario;
+            lblCargo.Text = Program.cargoUsuario;
+
         }
 
         private void FuncionáriosToolStripMenuItem_Click(object sender, EventArgs e)
@@ -55,6 +63,18 @@ namespace SistemaHotel
         {
             Produtos.FrmProdutos form = new Produtos.FrmProdutos();
             form.Show();
+        }
+
+        private void usuáriosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cadastros.FrmUsuarios form = new Cadastros.FrmUsuarios();
+            form.Show();
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

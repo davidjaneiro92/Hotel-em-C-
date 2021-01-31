@@ -37,6 +37,7 @@
             this.usuáriosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serviçosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cargoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fornecedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuProdutos = new System.Windows.Forms.ToolStripMenuItem();
             this.novoProdutoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.estoqueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,17 +73,16 @@
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblUsuario = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.lblCargo = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.fornecedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.pnlTopo.SuspendLayout();
             this.pnlRight.SuspendLayout();
@@ -125,40 +125,47 @@
             // funcionáriosToolStripMenuItem
             // 
             this.funcionáriosToolStripMenuItem.Name = "funcionáriosToolStripMenuItem";
-            this.funcionáriosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.funcionáriosToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.funcionáriosToolStripMenuItem.Text = "Funcionários";
             this.funcionáriosToolStripMenuItem.Click += new System.EventHandler(this.FuncionáriosToolStripMenuItem_Click);
             // 
             // hóspedesToolStripMenuItem
             // 
             this.hóspedesToolStripMenuItem.Name = "hóspedesToolStripMenuItem";
-            this.hóspedesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hóspedesToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.hóspedesToolStripMenuItem.Text = "Hóspedes";
             // 
             // quartosToolStripMenuItem
             // 
             this.quartosToolStripMenuItem.Name = "quartosToolStripMenuItem";
-            this.quartosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quartosToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.quartosToolStripMenuItem.Text = "Quartos";
             // 
             // usuáriosToolStripMenuItem
             // 
             this.usuáriosToolStripMenuItem.Name = "usuáriosToolStripMenuItem";
-            this.usuáriosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.usuáriosToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.usuáriosToolStripMenuItem.Text = "Usuários";
+            this.usuáriosToolStripMenuItem.Click += new System.EventHandler(this.usuáriosToolStripMenuItem_Click);
             // 
             // serviçosToolStripMenuItem
             // 
             this.serviçosToolStripMenuItem.Name = "serviçosToolStripMenuItem";
-            this.serviçosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.serviçosToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.serviçosToolStripMenuItem.Text = "Serviços";
             // 
             // cargoToolStripMenuItem
             // 
             this.cargoToolStripMenuItem.Name = "cargoToolStripMenuItem";
-            this.cargoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cargoToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.cargoToolStripMenuItem.Text = "Cargo";
             this.cargoToolStripMenuItem.Click += new System.EventHandler(this.CargoToolStripMenuItem_Click);
+            // 
+            // fornecedoresToolStripMenuItem
+            // 
+            this.fornecedoresToolStripMenuItem.Name = "fornecedoresToolStripMenuItem";
+            this.fornecedoresToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.fornecedoresToolStripMenuItem.Text = "Fornecedores";
             // 
             // MenuProdutos
             // 
@@ -173,14 +180,14 @@
             // novoProdutoToolStripMenuItem
             // 
             this.novoProdutoToolStripMenuItem.Name = "novoProdutoToolStripMenuItem";
-            this.novoProdutoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.novoProdutoToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.novoProdutoToolStripMenuItem.Text = "Novo Produto";
             this.novoProdutoToolStripMenuItem.Click += new System.EventHandler(this.NovoProdutoToolStripMenuItem_Click);
             // 
             // estoqueToolStripMenuItem
             // 
             this.estoqueToolStripMenuItem.Name = "estoqueToolStripMenuItem";
-            this.estoqueToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.estoqueToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.estoqueToolStripMenuItem.Text = "Estoque";
             // 
             // MenuMovimentacoes
@@ -409,10 +416,10 @@
             this.pnlRight.Controls.Add(this.label13);
             this.pnlRight.Controls.Add(this.label14);
             this.pnlRight.Controls.Add(this.label9);
-            this.pnlRight.Controls.Add(this.label8);
+            this.pnlRight.Controls.Add(this.lblUsuario);
             this.pnlRight.Controls.Add(this.label5);
             this.pnlRight.Controls.Add(this.pictureBox2);
-            this.pnlRight.Controls.Add(this.label6);
+            this.pnlRight.Controls.Add(this.lblCargo);
             this.pnlRight.Controls.Add(this.label7);
             this.pnlRight.Controls.Add(this.label4);
             this.pnlRight.Controls.Add(this.pictureBox1);
@@ -522,16 +529,17 @@
             this.label9.TabIndex = 10;
             this.label9.Text = "Nome:";
             // 
-            // label8
+            // lblUsuario
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label8.Location = new System.Drawing.Point(75, 195);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(134, 18);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Hugo Vasconcelos";
+            this.lblUsuario.AutoSize = true;
+            this.lblUsuario.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUsuario.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lblUsuario.Location = new System.Drawing.Point(75, 195);
+            this.lblUsuario.Name = "lblUsuario";
+            this.lblUsuario.Size = new System.Drawing.Size(134, 18);
+            this.lblUsuario.TabIndex = 9;
+            this.lblUsuario.Text = "Hugo Vasconcelos";
+            this.lblUsuario.Click += new System.EventHandler(this.label8_Click);
             // 
             // label5
             // 
@@ -554,16 +562,16 @@
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
             // 
-            // label6
+            // lblCargo
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.label6.Location = new System.Drawing.Point(75, 225);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 18);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "13/04/2019";
+            this.lblCargo.AutoSize = true;
+            this.lblCargo.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCargo.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lblCargo.Location = new System.Drawing.Point(75, 225);
+            this.lblCargo.Name = "lblCargo";
+            this.lblCargo.Size = new System.Drawing.Size(80, 18);
+            this.lblCargo.TabIndex = 6;
+            this.lblCargo.Text = "13/04/2019";
             // 
             // label7
             // 
@@ -629,12 +637,6 @@
             this.label1.Size = new System.Drawing.Size(103, 29);
             this.label1.TabIndex = 0;
             this.label1.Text = "13:00:00";
-            // 
-            // fornecedoresToolStripMenuItem
-            // 
-            this.fornecedoresToolStripMenuItem.Name = "fornecedoresToolStripMenuItem";
-            this.fornecedoresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fornecedoresToolStripMenuItem.Text = "Fornecedores";
             // 
             // FrmMenu
             // 
@@ -704,10 +706,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblCargo;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label15;
