@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +13,98 @@ namespace SistemaHotel.Produtos
 {
     public partial class FrmProdutos : Form
     {
+
+        Conexao con = new Conexao();
+        String sql;
+        MySqlCommand cmd;
+        String id;
+        
+
         public FrmProdutos()
         {
             InitializeComponent();
+           
         }
 
+        private void FormatarDG()
+        {
+            grid.Columns[0].HeaderText = "ID";
+            grid.Columns[1].HeaderText = "Nome";
+            grid.Columns[2].HeaderText = "Descrição";
+            grid.Columns[3].HeaderText = "Estoque";
+            grid.Columns[4].HeaderText = "Fornecidor";
+            grid.Columns[5].HeaderText = "Valor de Venda";
+            grid.Columns[6].HeaderText = "Valor de Compra";
+            grid.Columns[7].HeaderText = "Data";
+            grid.Columns[8].HeaderText = "Imagem";
+            grid.Columns[8].HeaderText = "Id do Fornecedor";
+
+            //formatar coluna para moeda
+            grid.Columns[5].DefaultCellStyle.Format = "C2";
+            grid.Columns[6].DefaultCellStyle.Format = "C2";
+
+
+            grid.Columns[0].Visible = false;
+           // grid.Columns[7].Visible = false;
+            grid.Columns[8].Visible = false;
+            grid.Columns[9].Visible = false;
+
+            grid.Columns[3].Width = 60;
+            grid.Columns[5].Width = 90;
+            grid.Columns[6].Width = 95;
+            grid.Columns[7].Width = 90;
+        }
+
+        private void Lista()
+        {
+
+            con.AbrirCon();
+            sql = "SELECT pro.id, pro.nome, pro.descricao, pro.estoque, forn.nome, pro.valor_venda, pro.valor_Compra, pro.data, pro.imagem, forn.nome FROM produtos as pro INNER JOIN fornecedores as forn ON pro.fornecedor = forn.id order by pro.nome ASC;";
+            cmd = new MySqlCommand(sql, con.con);
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            grid.DataSource = dt;
+            con.FecharCon();
+            FormatarDG();
+        }
+
+        private void BuscarNome()
+        {
+            con.AbrirCon();
+            sql = "SELECT pro.id, pro.nome, pro.descricao, pro.estoque, forn.nome, pro.valor_venda, pro.valor_Compra, pro.data, pro.imagem, forn.nome FROM produtos as pro INNER JOIN fornecedores as forn ON pro.fornecedor = forn.id where pro.nome LIKE @nome order by pro.nome asc"; // LIKE: para buscar em aproximação
+            cmd = new MySqlCommand(sql, con.con);
+            cmd.Parameters.AddWithValue("@nome", txtBuscarNome.Text + "%");
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            grid.DataSource = dt;
+            con.FecharCon();
+            FormatarDG();
+        }
+
+        private void carregarComboox()
+        {
+
+            con.AbrirCon();
+            sql = "SELECT * FROM fornecedores order by nome asc";
+            cmd = new MySqlCommand(sql, con.con);
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            cbFornecedor.DataSource = dt;
+            cbFornecedor.ValueMember = "id";
+            cbFornecedor.DisplayMember = "nome";
+
+
+
+            con.FecharCon();
+
+        }
 
         private void habilitarCampos()
         {
@@ -24,7 +112,7 @@ namespace SistemaHotel.Produtos
             txtDescricao.Enabled = true;
             txtValor.Enabled = true;
             cbFornecedor.Enabled = true;
-            txtEstoque.Enabled = true;
+            //txtEstoque.Enabled = true;
             btnImg.Enabled = true;
             txtNome.Focus();
 
@@ -61,16 +149,27 @@ namespace SistemaHotel.Produtos
         private void FrmProdutos_Load(object sender, EventArgs e)
         {
             LimparFoto();
+            carregarComboox();
+            Lista();
         }
 
         private void BtnNovo_Click(object sender, EventArgs e)
         {
+
+            if (cbFornecedor.Text == "")
+            {
+                MessageBox.Show("Cadastre um Antes um Fornecedor");
+                Close();
+            }
             habilitarCampos();
             btnSalvar.Enabled = true;
             btnNovo.Enabled = false;
             btnEditar.Enabled = false;
             btnExcluir.Enabled = false;
         }
+
+       
+        
 
         private void BtnSalvar_Click(object sender, EventArgs e)
         {
@@ -91,6 +190,19 @@ namespace SistemaHotel.Produtos
 
 
             //CÓDIGO DO BOTÃO PARA SALVAR
+
+            con.AbrirCon();
+            sql = "INSERT INTO produtos (nome, descricao, fornecedor, valor_venda, data) VALUES (@nome,  @descricao, @fornecedor, @valor_venda, curDate())";
+            cmd = new MySqlCommand(sql, con.con);
+            cmd.Parameters.AddWithValue("@nome", txtNome.Text);
+            cmd.Parameters.AddWithValue("@descricao", txtDescricao.Text);
+           // cmd.Parameters.AddWithValue("@estoque", txtEstoque.Text);
+            cmd.Parameters.AddWithValue("@fornecedor", cbFornecedor.SelectedValue);
+            cmd.Parameters.AddWithValue("@valor_venda", txtValor.Text.Replace(",","."));
+
+            cmd.ExecuteNonQuery();
+            con.FecharCon();
+            Lista();
 
             MessageBox.Show("Registro Salvo com Sucesso!", "Dados Salvo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             btnNovo.Enabled = true;
@@ -118,12 +230,26 @@ namespace SistemaHotel.Produtos
 
             //CÓDIGO DO BOTÃO PARA EDITAR
 
+            con.AbrirCon();
+            sql = "UPDATE  produtos SET nome = @nome, descricao = @descricao, fornecedor = @fornecedor, valor_venda = @valor where id = @id";
+            cmd = new MySqlCommand(sql, con.con);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@nome", txtNome.Text);
+            cmd.Parameters.AddWithValue("@descricao", txtDescricao.Text);
+            // cmd.Parameters.AddWithValue("@estoque", txtEstoque.Text);
+            cmd.Parameters.AddWithValue("@fornecedor", cbFornecedor.SelectedValue);
+            cmd.Parameters.AddWithValue("@valor", txtValor.Text.Replace(",", "."));
+
+            cmd.ExecuteNonQuery();
+            con.FecharCon();
+
             MessageBox.Show("Registro Editado com Sucesso!", "Dados Editados", MessageBoxButtons.OK, MessageBoxIcon.Information);
             btnNovo.Enabled = true;
             btnEditar.Enabled = false;
             btnExcluir.Enabled = false;
             limparCampos();
             desabilitarCampos();
+            Lista();
         }
 
         private void BtnExcluir_Click(object sender, EventArgs e)
@@ -133,6 +259,12 @@ namespace SistemaHotel.Produtos
             {
                 //CÓDIGO DO BOTÃO PARA EXCLUIR
 
+                con.AbrirCon();
+                sql = "DELETE FROM  produtos where id = @id";
+                cmd = new MySqlCommand(sql, con.con);
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+                con.FecharCon();
 
                 MessageBox.Show("Registro Excluido com Sucesso!", "Registro Excluido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnNovo.Enabled = true;
@@ -140,6 +272,10 @@ namespace SistemaHotel.Produtos
                 btnExcluir.Enabled = false;
                 txtNome.Text = "";
                 txtNome.Enabled = false;
+                Lista();
+                limparCampos();
+                desabilitarCampos();
+
             }
         }
 
@@ -151,6 +287,40 @@ namespace SistemaHotel.Produtos
             {
                 string foto = dialog.FileName.ToString();
                 img.ImageLocation = foto;
+            }
+        }
+
+        private void txtBuscarNome_TextChanged(object sender, EventArgs e)
+        {
+            BuscarNome();
+
+        }
+
+        private void grid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnEditar.Enabled = true;
+            btnExcluir.Enabled = true;
+            btnSalvar.Enabled = false;
+            habilitarCampos();
+
+            id = grid.CurrentRow.Cells[0].Value.ToString();
+            txtNome.Text = grid.CurrentRow.Cells[1].Value.ToString();
+            txtDescricao.Text = grid.CurrentRow.Cells[2].Value.ToString();
+            txtEstoque.Text = grid.CurrentRow.Cells[3].Value.ToString();
+            cbFornecedor.Text = grid.CurrentRow.Cells[4].Value.ToString();
+            txtValor.Text = grid.CurrentRow.Cells[5].Value.ToString();
+           
+        }
+
+        private void grid_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (Program.ChamadaProdutos == "estoque")
+            {
+                Program.nomeProduto = grid.CurrentRow.Cells[1].Value.ToString();
+                Program.estoqueProduto = grid.CurrentRow.Cells[3].Value.ToString();
+                Program.idProduto = grid.CurrentRow.Cells[0].Value.ToString();
+                Close();
+                
             }
         }
     }

@@ -33,3 +33,5 @@ C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.csproj.CopyComplete
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Cadastros.FrmUsuarios.resources
 C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Cadastros.FrmFornecedores.resources
+C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Produtos.FrmEstoque.resources
+C:\Users\David\Desktop\Arquivos\Sistema Inicial Mod 01\SistemaHotel\SistemaHotel\obj\Debug\SistemaHotel.Cadastros.Servicos.resources

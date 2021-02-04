@@ -326,8 +326,8 @@ namespace SistemaHotel.Cadastros
                 btnNovo.Enabled = true;
                 btnEditar.Enabled = false;
                 btnExcluir.Enabled = false;
-                txtNome.Text = "";
-                txtNome.Enabled = false;
+                limparCampos();
+                desabilitarCampos();
                 Lista();
             }
         }

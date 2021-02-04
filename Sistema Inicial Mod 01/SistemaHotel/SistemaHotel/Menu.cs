@@ -82,5 +82,17 @@ namespace SistemaHotel
             Cadastros.FrmFornecedores form = new Cadastros.FrmFornecedores();
             form.Show();
         }
+
+        private void estoqueToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Produtos.FrmEstoque form = new Produtos.FrmEstoque();
+            form.Show();
+        }
+
+        private void serviçosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cadastros.Servicos form = new Cadastros.Servicos();
+            form.Show();
+        }
     }
 }

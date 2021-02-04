@@ -13,6 +13,12 @@ namespace SistemaHotel
         public static String nomeUsuario;
         public static String cargoUsuario;
 
+        public static String ChamadaProdutos;
+       
+        public static String nomeProduto;
+        public static String estoqueProduto;
+        public static String idProduto;
+
         /// <summary>
         /// Ponto de entrada principal para o aplicativo.
         /// </summary>
